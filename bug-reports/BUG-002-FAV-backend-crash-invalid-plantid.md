@@ -44,7 +44,7 @@ TC ID: `FAV-05`
 
 ## Steps to Reproduce
 
-1. Log in via POST /auth/login to obtain a valid JWT token
+1. Log in via POST /auth/login to obtain a valid session token
 2. Send POST /users/:userId/favorites/invalid-id
    - Replace `:userId` with a valid user ID
    - Set header: `Authorization: Bearer <token>`
@@ -65,5 +65,5 @@ Backend throws an unhandled `CastError: Cast to ObjectId failed for value "inval
 
 ## Evidence
 
-![BUG-003 – backend crash log with CastError](assets/BUG-003-PLANT-backend-log.png)
-![BUG-003 – Postman ECONNRESET error, no response received](assets/BUG-003-PLANT-postman-log.png)
+![BUG-002 – backend crash log with CastError](assets/BUG-002-FAV-backend-log.png)
+![BUG-002 – Postman ECONNRESET error, no response received](assets/BUG-002-FAV-postman-log.png)
