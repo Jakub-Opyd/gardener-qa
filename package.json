@@ -1,0 +1,20 @@
+{
+  "name": "gardener-qa-portfolio",
+  "version": "1.0.0",
+  "description": "**Gardener** is a web application designed to help users plan and manage their garden by browsing plants, creating personalized plant collections, and organizing favorite plants.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.5.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1"
+  }
+}
