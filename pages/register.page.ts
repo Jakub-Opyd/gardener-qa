@@ -7,8 +7,9 @@ export class RegisterPage extends BasePage {
     readonly repeatPasswordInput: Locator;
     readonly registerSubmit: Locator;
     readonly emailError: Locator;
-    readonly passwordError: Locator;
+    readonly lengthPasswordError: Locator;
     readonly repeatPasswordError: Locator;
+    readonly emailConflictError: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -16,9 +17,10 @@ export class RegisterPage extends BasePage {
         this.passwordInput = page.getByRole('textbox', { name: 'Hasło:', exact: true });
         this.repeatPasswordInput = page.getByRole('textbox', { name: 'Powtórz hasło:' });
         this.registerSubmit = page.getByRole("button", { name: "Zarejestruj" });
-        this.emailError = page.getByText("Nieprawidłowy adres email");
-        this.passwordError = page.getByText("Hasło musi mieć co najmniej 8 znaków");
+        this.lengthPasswordError = page.getByText("Hasło musi mieć co najmniej 8 znaków");
         this.repeatPasswordError = page.getByText("Hasła muszą być takie same");
+        this.emailError = page.getByText("Nieprawidłowy adres email");
+        this.emailConflictError = page.getByText("User with this email already exists.");
     }
 
     async open() {

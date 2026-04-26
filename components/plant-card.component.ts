@@ -16,7 +16,15 @@ export class PlantCardComponent {
     }
 
     async toggleFavorite() {
+        const responsePromise = this.root.page().waitForResponse(
+            response =>
+                response.url().includes("/favorites") &&
+                (response.request().method() === "POST" || response.request().method() === "DELETE") &&
+                response.status() === 200
+        );
+
         await this.favoriteIcon.click();
+        const response = await responsePromise;
     }
 
     async getName() {

@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./base.page";
-import { PlantCardComponent } from "./plant-card.component";
+import { PlantCardComponent } from "../components/plant-card.component";
 
 export class FavoritePage extends BasePage {
     readonly title: Locator;

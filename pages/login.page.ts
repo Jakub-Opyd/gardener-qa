@@ -20,7 +20,7 @@ export class LoginPage extends BasePage {
     }
 
     async open() {
-        super.open("/user-login-form");
+        await super.open("/user-login-form");
     }
 
     async login(login: string, password: string) {

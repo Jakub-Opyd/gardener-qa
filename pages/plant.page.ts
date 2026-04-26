@@ -1,7 +1,8 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./base.page";
-import { PlantCardComponent } from "./plant-card.component";
-import { PlantFiltersComponent } from "./plant-filters.component";
+import { PlantCardComponent } from "../components/plant-card.component";
+import { PlantFiltersComponent } from "../components/plant-filters.component";
+
 export class PlantPage extends BasePage {
     readonly filters: PlantFiltersComponent;
     readonly searchInput: Locator;
