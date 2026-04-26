@@ -11,11 +11,11 @@
 
 | Module | Total | Pass | Fail | Not Executed |
 |---|---|---|---|---|
-| AUTH | 20 | 18 | 1 | 2 |
-| PLANTS | 22 | 20 | 1 | 0 |
+| AUTH | 20 | 14 | 6 | 0 |
+| PLANTS | 22 | 21 | 1 | 0 |
 | FAVORITES | 19 | 18 | 1 | 0 |
 | GARDEN CREATOR | 17 | 0 | 0 | 17 |
-| **Total** | **78** | **56** | **3** | **19** |
+| **Total** | **78** | **53** | **8** | **17** |
 
 ---
 
@@ -38,6 +38,9 @@
 | BUG-001 | Missing maximum length validation on email and password fields | Minor | New | AUTH-07 |
 | BUG-002 | Backend crashes on POST /users/:userId/favorites/:plantId with invalid plantId format | Critical | New | FAV-05 |
 | BUG-003 | Backend crashes on GET /plants/id/:id with invalid ID format | Critical | New | PLANT-05 |
+| BUG-004 | Backend crashes (500) on invalid email formats | Major | New | AUTH-03, AUTH-08 |
+| BUG-005 | Security: Backend crashes on injection payloads | Major | New | AUTH-09, AUTH-10 |
+| BUG-006 | Password length requirement not enforced (201 instead of 400) | Major | New | AUTH-06 |
 
 ---
 
@@ -47,14 +50,14 @@
 |---|---|---|---|---|---|
 | REQ-AUTH-01 | User registration | SC-AUTH-01 | AUTH-01 | Register new user | Pass |
 | REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-02 | Register with existing email | Pass |
-| REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-03 | Register with invalid email format | Pass |
+| REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-03 | Register with invalid email format | Fail - BUG-004 |
 | REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-04 | Register with empty email | Pass |
 | REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-05 | Register with empty password | Pass |
-| REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-06 | Register with short password | Pass |
+| REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-06 | Register with short password | Fail - BUG-006 |
 | REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-07 | Register with long password | Fail – BUG-001 |
-| REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-08 | Register with spaces-only email | Pass |
-| REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-09 | Register with SQL injection in email | Not executed |
-| REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-10 | Register with script injection in email | Not executed |
+| REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-08 | Register with spaces-only email | Fail - BUG-004 |
+| REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-09 | Register with SQL injection in email | Fail - BUG-005 |
+| REQ-AUTH-02 | Registration validation | SC-AUTH-04 | AUTH-10 | Register with script injection in email | Fail - BUG-005 |
 | REQ-AUTH-03 | User login | SC-AUTH-02 | AUTH-11 | Successful login | Pass |
 | REQ-AUTH-04 | Login validation | SC-AUTH-03 | AUTH-12 | Login with wrong password | Pass |
 | REQ-AUTH-04 | Login validation | SC-AUTH-03 | AUTH-13 | Login with non-existing email | Pass |
