@@ -82,7 +82,6 @@ export const test = base.extend<Fixtures>({
     },
     authenticatedUser: async ({ page }, use) => {
         await loginViaApi(page);
-        const userId = 2;
         await use(page);
     },
     loginPage: async ({ page }, use) => {
@@ -118,7 +117,7 @@ export const test = base.extend<Fixtures>({
 
         await use(new AuthService(request));
 
-        request.dispose();
+        await request.dispose();
     },
     favoritesApi: async ({ playwright }, use) => {
         const request = await playwright.request.newContext({
@@ -127,7 +126,7 @@ export const test = base.extend<Fixtures>({
 
         await use(new FavoritesService(request));
 
-        request.dispose();
+        await request.dispose();
     },
     plantsApi: async ({ playwright }, use) => {
         const request = await playwright.request.newContext({
@@ -136,7 +135,7 @@ export const test = base.extend<Fixtures>({
 
         await use(new PlantsService(request));
 
-        request.dispose();
+        await request.dispose();
     },
 });
 
