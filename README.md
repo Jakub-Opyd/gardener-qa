@@ -1,147 +1,421 @@
-# gardener-qa
+# Gardener-QA
 
-**Gardener** is a web application designed to help users plan and manage their garden by browsing plants, creating personalized plant collections, and organizing favorite plants.
+## Overview
 
-This repository presents a **QA testing project** conducted on the Gardener application. The goal was to design and execute a structured testing process covering manual functional testing, defect reporting, and traceability between test artifacts.
+**Gardener-QA** is a structured end-to-end QA project created for a full-stack gardening application built with React, Express.js, and MongoDB.
 
-The repository demonstrates a structured QA workflow similar to those used in real software development projects.
-
----
-
-## LIVE Test Report
-The latest automated test execution results are available online:
-[**View Interactive Playwright Report**](https://Jakub-Opyd.github.io/gardener-qa/)
-
-*Note: This report is generated from the local test environment to showcase automation capabilities and defect detection (including identified 500/201 errors).*
-
----
-
-## Application Under Test
-
-| Layer | Technology |
-|---|---|
-| Frontend | React (Vite), served via `npm run preview` on `localhost:4173` |
-| Backend | Express.js, running on `localhost:3001` |
-| Database | MongoDB Cloud |
-| Auth | Session token (custom Bearer token) |
-
----
-
-## Application Scope
-
-The tested application includes the following functional modules:
-
-- **Authentication** – user registration, login, session persistence, access control
-- **Plant Encyclopedia** – browsing plant list, viewing plant details, search and filtering
-- **Favorites** – adding, removing, and retrieving favorite plants
-- **Garden Creator** – visual garden planning, plant placement, removing plants from layout
-
----
-
-## Testing Scope
-
-The QA process included:
+The project combines:
 
 - manual functional testing
+- API testing
+- UI automation
+- defect reporting
+- traceability management
+- basic security validation
+- maintainable Playwright architecture
+
+The main goal was not only to verify application behavior, but also to simulate a real QA workflow used in modern software projects.
+
+---
+
+## Live Playwright Report
+
+The latest automated execution report is available online:
+
+➡️ **[View Playwright HTML Report](https://jakub-opyd.github.io/gardener-qa/)**
+
+The report includes:
+
+- executed test cases
+- screenshots on failure
+- traces on retry
+- execution logs
+- browser-level debugging artifacts
+
+---
+
+# Project Scope
+
+The tested application allows users to:
+
+- register and authenticate accounts
+- browse a plant encyclopedia
+- search and filter plants
+- manage favorite plants
+- create personalized garden layouts
+
+---
+
+# Testing Scope
+
+The project covers both frontend and backend verification.
+
+## Manual Testing
+
+- functional testing
 - negative testing
-- input validation testing
-- API behaviour verification
-- documentation of defects and execution results
+- validation testing
+- exploratory testing
+- edge-case verification
+- defect reporting
+- traceability mapping
 
-Testing covered both **frontend functionality** and **backend API behaviour**.
+## Automated Testing
+
+### UI Automation
+
+Implemented with:
+
+- Playwright
+- TypeScript
+- Page Object Model (POM)
+- reusable UI Components
+
+### API Testing
+
+Implemented with:
+
+- Playwright APIRequestContext
+- service-layer abstraction
+- isolated test users
+- schema verification
+- authentication/session validation
+- negative API testing
 
 ---
 
-## Tools Used
+# Tech Stack
 
-- Manual test documentation – Markdown
-- API testing – Postman
-- Network inspection – Chrome DevTools
-- Database verification – MongoDB Compass
-- Version control – Git / GitHub
-- API Testing & Automation – **Playwright (TypeScript)**, Postman
+| Area | Technology |
+|---|---|
+| Language | TypeScript |
+| UI Automation | Playwright |
+| API Testing | Playwright API |
+| Architecture | POM + Component Objects + Service Layer |
+| CI-ready Reporting | Playwright HTML Reporter |
+| Test Data | JSON fixtures |
+| Backend | Express.js |
+| Frontend | React (Vite) |
+| Database | MongoDB |
+| Version Control | Git / GitHub |
 
 ---
 
-## Test Documentation
+# Framework Architecture
 
+The framework was designed with maintainability and scalability in mind.
+
+## UI Layer
+
+The UI automation layer uses:
+
+- Page Object Model
+- reusable component abstraction
+- centralized fixtures
+- reusable locators and actions
+
+Example structure:
+
+```text
+pages/
+components/
+fixtures.ts
 ```
-📂docs
-┣ 📂test-cases
-┃ ┣ 📜auth.md
-┃ ┣ 📜favorites.md
-┃ ┣ 📜garden-creator.md
-┃ ┗ 📜plants.md
-┣ 📜bug-report-template.md
-┣ 📜test-plan.md
-┣ 📜test-scenarios.md
-┣ 📜test-strategy.md
-┗ 📜traceability-matrix.md
 
+### Example
+
+```ts
+export class PlantPage extends BasePage {
+    readonly filters: PlantFiltersComponent;
+
+    async search(name: string) {
+        await this.searchInput.fill(name);
+    }
+
+    getPlantCardByName(plantName: string) {
+        return new PlantCardComponent(...);
+    }
+}
 ```
 
-- **Test Strategy** – overall testing approach and scope
-- **Test Plan** – test environment and execution assumptions
-- **Test Scenarios** – high-level functional scenarios
-- **Test Cases** – detailed manual test cases with actual results
-- **Traceability Matrix** – mapping between requirements, scenarios, test cases, and defects
+---
+
+## API Layer
+
+API communication is abstracted into reusable service classes.
+
+Example:
+
+```ts
+export class AuthService {
+    async login(credentials: LoginPayload) {
+        return await this.request.post("/auth/login", {
+            data: credentials
+        });
+    }
+}
+```
+
+Benefits:
+
+- cleaner tests
+- reusable requests
+- centralized endpoint management
+- easier maintenance
 
 ---
 
-## Test Coverage
+## Fixtures & Test Isolation
 
-All 30 defined test scenarios are covered by test cases — **100% scenario coverage**.
+Custom Playwright fixtures are used to:
 
-| Module | Total | Pass | Fail | Not Executed |
-|---|---|---|---|---|
-| AUTH | 20 | 14 | 6 | 0 |
-| PLANTS | 22 | 21 | 1 | 0 |
-| FAVORITES | 19 | 18 | 1 | 0 |
-| GARDEN CREATOR | 17 | 0 | 0 | 17 |
-| **Total** | **78** | **53** | **8** | **17** |
+- generate dynamic users
+- isolate test execution
+- authenticate users via API
+- reduce duplicated setup logic
 
----
+Example:
 
-## Bug Reports
+```ts
+dynamicUser: async ({ page }, use) => {
+    const user = generateUserData();
+}
+```
 
-6 key defects found during testing:
+This significantly improves:
 
-| ID | Title | Severity | Module |
-|---|---|---|---|
-| [BUG-001](bug-reports/BUG-001-AUTH-missing-max-length-validation.md) | Missing maximum length validation on email and password fields | Minor | AUTH |
-| [BUG-002](bug-reports/BUG-002-FAV-backend-crash-invalid-plantid.md) | Backend crashes on POST /users/:userId/favorites/:plantId with invalid plantId format | Critical | FAV |
-| [BUG-003](bug-reports/BUG-003-PLANT-backend-crash-invalid-id.md) | Backend crashes on GET /plants/id/:id with invalid ID format | Critical | PLANT |
-| [BUG-004](bug-reports/BUG-004-AUTH-Validation-Crash.md) | Backend crashes (500) on invalid email formats | Major | AUTH-03, AUTH |
-| [BUG-005](bug-reports/BUG-005-AUTH-Injection-Crash.md) | Security: Backend crashes on injection payloads | Major | AUTH-09, AUTH |
-| [BUG-006](bug-reports/BUG-006-AUTH-Short-Password.md) | Password length requirement not enforced (201 instead of 400) | Major | AUTH |
-
-Each bug report follows a structured format including summary, environment, steps to reproduce, expected result, actual result, severity, status, and evidence (screenshots).
+- execution speed
+- test stability
+- maintainability
 
 ---
 
-## Test Accounts
+# Test Documentation
 
-| Email | Password | Role |
+```text
+docs/
+├── test-plan.md
+├── test-strategy.md
+├── test-scenarios.md
+├── traceability-matrix.md
+└── test-cases/
+```
+
+The repository contains:
+
+- Test Strategy
+- Test Plan
+- Test Scenarios
+- Test Cases
+- Traceability Matrix
+- Bug Reports
+- Final Test Summary Report
+
+---
+
+# Automated Test Structure
+
+```text
+tests/
+├── api/
+│   ├── auth.api.spec.ts
+│   ├── favorites.api.spec.ts
+│   └── plants.api.spec.ts
+└── gui/
+    ├── auth.gui.spec.ts
+    ├── favorites.gui.spec.ts
+    └── plants.gui.spec.ts
+```
+
+---
+
+# Test Coverage
+
+## Authentication
+
+Coverage includes:
+
+- registration
+- login
+- validation
+- authorization
+- session persistence
+- negative scenarios
+- injection attempts
+- multiple failed login attempts
+
+## Plants Module
+
+Coverage includes:
+
+- plant list retrieval
+- search functionality
+- filtering logic
+- plant details
+- API schema validation
+- data integrity validation
+- response consistency
+
+## Favorites Module
+
+Coverage includes:
+
+- adding favorites
+- removing favorites
+- unauthorized access handling
+- persistence verification
+
+---
+
+# Defect Reporting
+
+The project includes professionally documented defects with:
+
+- reproduction steps
+- expected vs actual result
+- severity classification
+- screenshots
+- backend logs
+- Postman evidence
+
+Example issues discovered:
+
+| ID | Description | Severity |
 |---|---|---|
-| `testuser1@gardener.test` | `TestPass123!` | Primary test user |
-| `testuser2@gardener.test` | `TestPass123!` | Secondary test user (isolation tests) |
+| BUG-002 | Backend crash on invalid plantId | Critical |
+| BUG-003 | Unhandled MongoDB CastError | Critical |
+| BUG-005 | Injection payload handling failure | Major |
 
 ---
 
-## Test Automation
+# Security & Negative Testing
 
-API tests are implemented using **Playwright**.
+The project intentionally includes negative and security-oriented scenarios such as:
 
-```typescript
-test("AUTH-01: Register new user", async ({ authApi }) => {
-        const email = `user_${Date.now()}@gardener.playwright.test`;
-        const response = await authApi.register({ email, password: valid.validPassword });
+- invalid ObjectId handling
+- malformed email validation
+- injection payload verification
+- invalid authentication attempts
+- unauthorized endpoint access
 
-        expect(response.status()).toBe(201);
-        const body = await response.json();
-        expect(body.userId).toBeTruthy();
-        expect(body.email).toBe(email);
-        expect(body.token.length).toBeGreaterThan(50);
-        expect(body).not.toHaveProperty('password');
-    });
+Several backend stability issues were identified during testing.
+
+---
+
+# Why Garden Creator Was Not Automated
+
+The Garden Creator module is heavily based on:
+
+- drag & drop interactions
+- pixel-based positioning
+- visual layout rendering
+
+Reliable automation would require:
+
+- advanced visual regression testing
+- image comparison strategies
+- coordinate-based validation
+
+Because of the high implementation cost compared to the business/testing value at the current project stage, automation for this module was intentionally postponed.
+
+This decision was made as a practical QA prioritization and ROI tradeoff.
+
+---
+
+# Test Reporting & Debugging
+
+The framework automatically generates:
+
+- HTML reports
+- screenshots on failure
+- Playwright traces
+- execution artifacts
+
+Configured in:
+
+```ts
+use: {
+  trace: 'on-first-retry',
+  screenshot: 'only-on-failure',
+  video: 'on-first-retry',
+}
 ```
+
+---
+
+# Running Tests
+
+## Install dependencies
+
+```bash
+npm install
+```
+
+## Run all tests
+
+```bash
+npx playwright test
+```
+
+## Run API tests only
+
+```bash
+npx playwright test --project=API-Tests
+```
+
+## Run UI tests only
+
+```bash
+npx playwright test --project=GUI-Chromium
+```
+
+## Open HTML report
+
+```bash
+npx playwright show-report
+```
+
+---
+
+# Environment Variables
+
+Example `.env` configuration:
+
+```env
+BASE_URL=http://localhost:4173
+API_URL=http://localhost:3001
+
+TEST_USER1_EMAIL=test@example.com
+TEST_USER1_PASSWORD=Password123!
+```
+
+---
+
+# Future Improvements
+
+Planned improvements include:
+
+- GitHub Actions CI integration
+- smoke/regression tagging strategy
+- visual regression testing
+- database seeding
+- API schema validation libraries
+- performance testing
+- accessibility testing
+- Dockerized execution
+- advanced reporting dashboards
+
+---
+
+# Project Purpose
+
+This repository was created to demonstrate practical QA engineering skills in areas such as:
+
+- test architecture
+- automation design
+- API testing
+- manual testing
+- debugging
+- defect analysis
+- maintainable framework development
+- quality-oriented engineering thinking
