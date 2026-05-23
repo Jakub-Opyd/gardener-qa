@@ -9,37 +9,7 @@ import { AuthService } from "./api/auth.service";
 import { FavoritesService } from "./api/favorites.service";
 import { PlantsService } from "./api/plants.service";
 import { AuthUser } from "./models/auth.types";
-import { generateUserData } from "./factories/user.factory";
-
-async function createDynamicUser(authApi: AuthService) {
-    const user = generateUserData();
-    const response = await authApi.register(user);
-
-    if (!response.ok()) {
-        const body = await response.text();
-
-        throw new Error(`
-            Failed to create user.
-            Status: ${response.status()}
-            Body: ${body}
-        `);
-    }
-
-    const { userId, email, token } = await response.json();
-    return { userId, email, token };
-}
-
-async function injectSession(page: Page, user: AuthUser) {
-    await page.goto("/");
-
-    await page.evaluate((user) => {
-        sessionStorage.setItem("userId", user.userId);
-        sessionStorage.setItem("email", user.email);
-        sessionStorage.setItem("token", user.token);
-    }, user);
-
-    await page.goto("/");
-}
+import { createDynamicUser, injectSession } from "./helpers/auth.helpers";
 
 type Fixtures = {
     apiContext: APIRequestContext;
