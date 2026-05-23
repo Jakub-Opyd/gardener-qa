@@ -1,4 +1,4 @@
-import { APIRequestContext, test as base, Page, request } from "@playwright/test";
+import { APIRequestContext, test as base, Page } from "@playwright/test";
 import { LoginPage } from "./pages/login.page";
 import { RegisterPage } from "./pages/register.page";
 import { PlantPage } from "./pages/plant.page";
@@ -9,49 +9,62 @@ import validInputs from "./test-data/valid-inputs.json";
 import { AuthService } from "./api/auth.service";
 import { FavoritesService } from "./api/favorites.service";
 import { PlantsService } from "./api/plants.service";
+import { randomUUID } from "crypto";
 
 const generateUserData = () => {
     return {
-        email: `user_${Date.now()}@gardener.playwright.test`,
+        email: `user_${randomUUID()}@gardener.playwright.test`,
         password: validInputs.validPassword
     };
 };
 
-async function loginViaApi(page: Page) {
-    const response = await page.request.post(process.env.API_URL + "/auth/login", {
-        data: {
-            email: process.env.TEST_USER1_EMAIL,
-            password: process.env.TEST_USER1_PASSWORD
-        }
-    });
+async function createDynamicUser(authApi: AuthService) {
+    const user = generateUserData();
+    const response = await authApi.register(user);
+
+    if (!response.ok()) {
+        const body = await response.text();
+
+        throw new Error(`
+            Failed to create user.
+            Status: ${response.status()}
+            Body: ${body}
+        `);
+    }
 
     const { userId, email, token } = await response.json();
+    return { userId, email, token };
+}
+type AuthUser = {
+    userId: string;
+    email: string;
+    token: string;
+};
 
+async function injectSession(page: Page, user: AuthUser) {
     await page.goto("/");
-    await page.evaluate(({ userId, email, token }) => {
-        sessionStorage.setItem("userId", userId);
-        sessionStorage.setItem("email", email);
-        sessionStorage.setItem("token", token);
-    }, { userId, email, token });
+
+    await page.evaluate((user) => {
+        sessionStorage.setItem("userId", user.userId);
+        sessionStorage.setItem("email", user.email);
+        sessionStorage.setItem("token", user.token);
+    }, user);
 
     await page.goto("/");
 }
 
-
 type Fixtures = {
-    authenticatedUser: Page;
-    dynamicUser: Page;
+    apiContext: APIRequestContext;
     loginPage: LoginPage;
     registerPage: RegisterPage;
     plantPage: PlantPage;
     plantInfoPage: PlantInfoPage;
     favoritePage: FavoritePage;
     homePage: HomePage;
-    apiUser: {
-        request: APIRequestContext;
-        userId: string;
-        token: string;
-        email: string;
+    apiUser: AuthUser;
+    guiUser: {
+        page: Page;
+        user: AuthUser;
     };
     authApi: AuthService;
     favoritesApi: FavoritesService;
@@ -59,31 +72,6 @@ type Fixtures = {
 };
 
 export const test = base.extend<Fixtures>({
-    dynamicUser: async ({ page }, use) => {
-        const user = generateUserData();
-        const response = await page.request.post(process.env.API_URL + "/auth/register", {
-            data: {
-                email: user.email,
-                password: user.password
-            }
-        });
-
-        const { userId, email, token } = await response.json();
-
-        await page.goto("/");
-        await page.evaluate(({ userId, email, token }) => {
-            sessionStorage.setItem("userId", userId);
-            sessionStorage.setItem("email", email);
-            sessionStorage.setItem("token", token);
-        }, { userId, email, token });
-
-        await page.goto("/");
-        await use(page);
-    },
-    authenticatedUser: async ({ page }, use) => {
-        await loginViaApi(page);
-        await use(page);
-    },
     loginPage: async ({ page }, use) => {
         await use(new LoginPage(page));
     },
@@ -102,40 +90,34 @@ export const test = base.extend<Fixtures>({
     homePage: async ({ page }, use) => {
         await use(new HomePage(page));
     },
+    apiContext: async ({ playwright }, use) => {
+        const apiContext = await playwright.request.newContext({
+            baseURL: process.env.API_URL,
+        });
+
+        await use(apiContext);
+
+        await apiContext.dispose();
+    },
+    guiUser: async ({ page, authApi }, use) => {
+        const user = await createDynamicUser(authApi);
+
+        await injectSession(page, user);
+
+        await use({ page, user });
+    },
     apiUser: async ({ authApi }, use) => {
-        const user = generateUserData();
-
-        const registerResponse = await authApi.register(user)
-
-        const { userId, email, token } = await registerResponse.json();
-        use({ request: (authApi as any), userId, email, token });
+        const user = await createDynamicUser(authApi);
+        await use(user);
     },
-    authApi: async ({ playwright }, use) => {
-        const request = await playwright.request.newContext({
-            baseURL: process.env.API_URL
-        });
-
-        await use(new AuthService(request));
-
-        await request.dispose();
+    authApi: async ({ apiContext }, use) => {
+        await use(new AuthService(apiContext));
     },
-    favoritesApi: async ({ playwright }, use) => {
-        const request = await playwright.request.newContext({
-            baseURL: process.env.API_URL
-        });
-
-        await use(new FavoritesService(request));
-
-        await request.dispose();
+    favoritesApi: async ({ apiContext }, use) => {
+        await use(new FavoritesService(apiContext));
     },
-    plantsApi: async ({ playwright }, use) => {
-        const request = await playwright.request.newContext({
-            baseURL: process.env.API_URL
-        });
-
-        await use(new PlantsService(request));
-
-        await request.dispose();
+    plantsApi: async ({ apiContext }, use) => {
+        await use(new PlantsService(apiContext));
     },
 });
 

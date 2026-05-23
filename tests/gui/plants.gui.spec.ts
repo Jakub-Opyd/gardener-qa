@@ -114,7 +114,7 @@ test.describe("PLANTS - UI Test Suite", () => {
     });
 
     test.describe("Authorized user", () => {
-        test.beforeEach(async ({ authenticatedUser, plantPage }) => {
+        test.beforeEach(async ({ guiUser, plantPage }) => {
             await plantPage.open();
             await plantPage.waitForData();
         });
