@@ -5,19 +5,11 @@ import { PlantPage } from "./pages/plant.page";
 import { PlantInfoPage } from "./pages/plant-info.page";
 import { FavoritePage } from "./pages/favorite.page";
 import { HomePage } from "./pages/home.page";
-import validInputs from "./test-data/valid-inputs.json";
 import { AuthService } from "./api/auth.service";
 import { FavoritesService } from "./api/favorites.service";
 import { PlantsService } from "./api/plants.service";
-import { randomUUID } from "crypto";
 import { AuthUser } from "./models/auth.types";
-
-const generateUserData = () => {
-    return {
-        email: `user_${randomUUID()}@gardener.playwright.test`,
-        password: validInputs.validPassword
-    };
-};
+import { generateUserData } from "./factories/user.factory";
 
 async function createDynamicUser(authApi: AuthService) {
     const user = generateUserData();
