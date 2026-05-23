@@ -10,6 +10,7 @@ import { AuthService } from "./api/auth.service";
 import { FavoritesService } from "./api/favorites.service";
 import { PlantsService } from "./api/plants.service";
 import { randomUUID } from "crypto";
+import { AuthUser } from "./models/auth.types";
 
 const generateUserData = () => {
     return {
@@ -35,11 +36,6 @@ async function createDynamicUser(authApi: AuthService) {
     const { userId, email, token } = await response.json();
     return { userId, email, token };
 }
-type AuthUser = {
-    userId: string;
-    email: string;
-    token: string;
-};
 
 async function injectSession(page: Page, user: AuthUser) {
     await page.goto("/");
