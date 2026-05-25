@@ -1,5 +1,5 @@
 import { APIRequestContext } from "@playwright/test";
-import { LoginPayload, RegisterPayload } from "../models/auth.types";
+import { LoginPayload, RegisterPayload } from "../models/auth/auth.payloads";
 
 export class AuthService {
     constructor(private request: APIRequestContext) { }
