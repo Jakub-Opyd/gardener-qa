@@ -8,7 +8,7 @@ import { HomePage } from "./pages/home.page";
 import { AuthService } from "./api/auth.service";
 import { FavoritesService } from "./api/favorites.service";
 import { PlantsService } from "./api/plants.service";
-import { AuthUser } from "./models/auth.types";
+import { AuthResponse } from "./models/auth/auth.responses";
 import { createDynamicUser, injectSession } from "./helpers/auth.helpers";
 
 type Fixtures = {
@@ -19,10 +19,10 @@ type Fixtures = {
     plantInfoPage: PlantInfoPage;
     favoritePage: FavoritePage;
     homePage: HomePage;
-    apiUser: AuthUser;
+    apiUser: AuthResponse;
     guiUser: {
         page: Page;
-        user: AuthUser;
+        user: AuthResponse;
     };
     authApi: AuthService;
     favoritesApi: FavoritesService;

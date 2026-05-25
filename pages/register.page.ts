@@ -1,5 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./base.page";
+import { RegisterFormData } from "../models/auth/auth.forms";
 
 export class RegisterPage extends BasePage {
     readonly emailInput: Locator;
@@ -27,10 +28,10 @@ export class RegisterPage extends BasePage {
         await super.open("/register-form");
     }
 
-    async register(email: string, password: string, repeatPassword: string) {
-        await this.emailInput.fill(email);
-        await this.passwordInput.fill(password);
-        await this.repeatPasswordInput.fill(repeatPassword);
+    async register(user: RegisterFormData) {
+        await this.emailInput.fill(user.email);
+        await this.passwordInput.fill(user.password);
+        await this.repeatPasswordInput.fill(user.repeatPassword);
         await this.registerSubmit.click();
     }
 

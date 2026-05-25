@@ -1,7 +1,8 @@
 import { test, expect } from "../../fixtures";
-import invalid from "../../test-data/invalid-inputs.json";
-import valid from "../../test-data/valid-inputs.json";
-import users from "../../test-data/users.json";
+import { createEmptyEmailUser, createEmptyPasswordUser, createInvalidEmailUser, createLongPasswordUser, createScriptInjectionUser, createShortPasswordUser, createSpacesOnlyEmailUser, createValidUser } from "../../factories/auth/auth.factory";
+import { SEEDED_USERS } from "../../test-data/auth/seeded-users";
+import { VALID_PASSWORD } from "../../test-data/shared/validation.constants";
+import { EMPTY_EMAIL, EMPTY_PASSWORD, INVALID_PASSWORD, NON_EXISTING_EMAIL } from "../../test-data/auth/auth.constants";
 
 test.describe("AUTH - UI Full Coverage (AUTH-01 to AUTH-20)", () => {
 
@@ -12,58 +13,73 @@ test.describe("AUTH - UI Full Coverage (AUTH-01 to AUTH-20)", () => {
         });
 
         test('AUTH-01: Registration - success flow @smoke', async ({ registerPage, page }) => {
-            await registerPage.register(`user_${Date.now()}@gardener.playwright.test`, valid.validPassword, valid.validPassword);
+            const user = createValidUser();
+
+            await registerPage.register({ ...user, repeatPassword: user.password });
             await expect(page).toHaveURL("/");
         });
 
         test('AUTH-02: Registration - existing email', async ({ registerPage }) => {
-            await registerPage.register(users.testUser1.email, valid.validPassword, valid.validPassword);
+            const user = {
+                email: SEEDED_USERS.user1.email,
+                password: VALID_PASSWORD,
+                repeatPassword: VALID_PASSWORD
+            };
+            await registerPage.register(user);
             await expect(registerPage.emailConflictError).toBeVisible();
         });
 
         test('AUTH-03: Registration - invalid email format', async ({ registerPage }) => {
-            await registerPage.register(invalid.invalidEmail, valid.validPassword, valid.validPassword);
+            const user = createInvalidEmailUser();
+            await registerPage.register({ ...user, repeatPassword: user.password });
             await expect(registerPage.emailError).toBeVisible();
         });
 
         test('AUTH-04: Registration - empty email', async ({ registerPage }) => {
-            await registerPage.register("", valid.validPassword, valid.validPassword);
+            const user = createEmptyEmailUser();
+            await registerPage.register({ ...user, repeatPassword: user.password });
             await expect(registerPage.emailError).toBeVisible();
         });
 
         test('AUTH-05: Registration - empty password', async ({ registerPage }) => {
-            await registerPage.register(`user_${Date.now()}@gardener.playwright.test`, "", "");
+            const user = createEmptyPasswordUser()
+            await registerPage.register({ ...user, repeatPassword: user.password });
             await expect(registerPage.lengthPasswordError).toHaveCount(2)
         });
 
         test('AUTH-06: Registration - short password', async ({ registerPage }) => {
-            await registerPage.register(`user_${Date.now()}@gardener.playwright.test`, invalid.shortPassword, invalid.shortPassword);
+            const user = createShortPasswordUser();
+            await registerPage.register({ ...user, repeatPassword: user.password });
             await expect(registerPage.lengthPasswordError).toHaveCount(2);
         });
 
         test('AUTH-07: Registration - long password (BUG-001)', async ({ registerPage }) => {
-            await registerPage.register(`user_${Date.now()}@gardener.playwright.test`, invalid.longPassword, invalid.longPassword);
+            const user = createLongPasswordUser();
+            await registerPage.register({ ...user, repeatPassword: user.password });
             await expect(registerPage.lengthPasswordError).toBeVisible();
         });
 
         test('AUTH-08: Registration - spaces only email', async ({ registerPage }) => {
-            await registerPage.register(invalid.spacesOnlyEmail, valid.validPassword, valid.validPassword);
+            const user = createSpacesOnlyEmailUser();
+            await registerPage.register({ ...user, repeatPassword: user.password });
             await expect(registerPage.emailError).toBeVisible();
         });
 
         test('AUTH-9: Registration - passwords mismatch', async ({ registerPage }) => {
-            await registerPage.register(`user_${Date.now()}@gardener.playwright.test`, valid.validPassword, "OtherPass123!");
+            const user = createValidUser();
+            await registerPage.register({ ...user, repeatPassword: "OtherPass123!" });
             await expect(registerPage.repeatPasswordError).toBeVisible();
         });
 
         test('AUTH-10: Registration - script injection in email field', async ({ registerPage }) => {
-            const scriptTag = "<script>alert('xss')</script>@test.pl";
-            await registerPage.register(scriptTag, valid.validPassword, valid.validPassword);
+            const user = createScriptInjectionUser();
+            await registerPage.register({ ...user, repeatPassword: VALID_PASSWORD });
             await expect(registerPage.emailError).toBeVisible();
         });
 
         test('AUTH-20: Login flow - immediate login after account creation', async ({ registerPage, page }) => {
-            await registerPage.register(`user_${Date.now()}@gardener.playwright.test`, valid.validPassword, valid.validPassword);
+            const user = createValidUser();
+            await registerPage.register({ ...user, repeatPassword: user.password });
             await expect(page).toHaveURL("/");
             await expect(page.getByRole("button", { name: "Wyloguj" })).toBeVisible();
         });
@@ -76,38 +92,38 @@ test.describe("AUTH - UI Full Coverage (AUTH-01 to AUTH-20)", () => {
         });
 
         test('AUTH-11: Login - success flow @smoke', async ({ loginPage, page }) => {
-            await loginPage.login(process.env.TEST_USER1_EMAIL!, process.env.TEST_USER1_PASSWORD!);
+            await loginPage.login(SEEDED_USERS.user1.email, VALID_PASSWORD);
             await expect(page).toHaveURL("/");
         });
 
         test('AUTH-12: Login - wrong password', async ({ loginPage }) => {
-            await loginPage.login(users.testUser1.email, invalid.invalidPassword);
+            await loginPage.login(SEEDED_USERS.user1.email, INVALID_PASSWORD);
             await expect(loginPage.loginError).toBeVisible();
         });
 
         test('AUTH-13: Login - non-existing user', async ({ loginPage }) => {
-            await loginPage.login(invalid.notExistingEmail, valid.validPassword);
+            await loginPage.login(NON_EXISTING_EMAIL, VALID_PASSWORD);
             await expect(loginPage.loginError).toBeVisible();
         });
 
         test('AUTH-14: Login - empty email', async ({ loginPage }) => {
-            await loginPage.login("", valid.validPassword);
+            await loginPage.login(EMPTY_EMAIL, VALID_PASSWORD);
             await expect(loginPage.emailError).toBeVisible();
         });
 
         test('AUTH-15: Login - empty password', async ({ loginPage }) => {
-            await loginPage.login(users.testUser1.email, "");
+            await loginPage.login(SEEDED_USERS.user1.email, EMPTY_PASSWORD);
             await expect(loginPage.passwordError).toBeVisible();
         });
 
         test('AUTH-16: Login - empty form', async ({ loginPage }) => {
-            await loginPage.login("", "");
+            await loginPage.login(EMPTY_EMAIL, EMPTY_PASSWORD);
             await expect(loginPage.emailError).toBeVisible();
             await expect(loginPage.passwordError).toBeVisible();
         });
 
         test('AUTH-17: Session persistence - stays logged in after refresh', async ({ loginPage, page }) => {
-            await loginPage.login(process.env.TEST_USER1_EMAIL!, process.env.TEST_USER1_PASSWORD!);
+            await loginPage.login(SEEDED_USERS.user1.email, VALID_PASSWORD);
             await expect(page).toHaveURL("/");
             await expect(page.getByRole("button", { name: "Wyloguj" })).toBeVisible();
             await page.reload();
@@ -120,7 +136,7 @@ test.describe("AUTH - UI Full Coverage (AUTH-01 to AUTH-20)", () => {
 
         test('AUTH-19: Multiple failed login attempts (UX test)', async ({ loginPage }) => {
             for (let i = 0; i < 3; i++) {
-                await loginPage.login(users.testUser1.email, invalid.invalidPassword);
+                await loginPage.login(SEEDED_USERS.user1.email, INVALID_PASSWORD);
                 await expect(loginPage.loginError).toBeVisible();
             }
         });

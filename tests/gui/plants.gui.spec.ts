@@ -1,5 +1,5 @@
 import { test, expect } from "../../fixtures";
-import plants from "../../test-data/plants.json";
+import { SEEDED_PLANTS } from "../../test-data/plants/seeded-plants";
 
 test.describe("PLANTS - UI Test Suite", () => {
 
@@ -13,16 +13,16 @@ test.describe("PLANTS - UI Test Suite", () => {
             const count = await plantPage.getPlantsCount();
             expect(count).toBeGreaterThan(0);
 
-            const plantA = plantPage.getPlantCardByName(plants.plantA.name);
+            const plantA = plantPage.getPlantCardByName(SEEDED_PLANTS.lavender.name);
             await expect(plantA.cardTitle).toBeVisible();
         });
 
         test("PLANT-10: Plant details accessible for unauthorized user", async ({ plantPage, plantInfoPage }) => {
-            const plantCard = plantPage.getPlantCardByName(plants.plantB.name);
+            const plantCard = plantPage.getPlantCardByName(SEEDED_PLANTS.daylily.name);
             await plantCard.openDetails();
 
-            await expect(plantInfoPage.page).toHaveURL(new RegExp(`/plant/${plants.plantB.id}`));
-            await expect(plantInfoPage.name).toHaveText(plants.plantB.name);
+            await expect(plantInfoPage.page).toHaveURL(new RegExp(`/plant/${SEEDED_PLANTS.daylily._id}`));
+            await expect(plantInfoPage.name).toHaveText(SEEDED_PLANTS.daylily.name);
         });
 
         test("PLANT-13a: Search finds existing plant by partial name", async ({ plantPage }) => {
@@ -100,10 +100,10 @@ test.describe("PLANTS - UI Test Suite", () => {
         });
 
         test("PLANT-16: Plant card data integrity", async ({ plantPage, plantsApi }) => {
-            const plantCard = plantPage.getPlantCardByName(plants.plantA.name);
+            const plantCard = plantPage.getPlantCardByName(SEEDED_PLANTS.lavender.name);
             await plantCard.clickCard();
 
-            const response = await plantsApi.getById(plants.plantA.id);
+            const response = await plantsApi.getById(SEEDED_PLANTS.lavender._id);
             const plantData = await response.json();
 
             await expect(plantCard.cardTitle).toContainText(plantData.name);
@@ -123,16 +123,16 @@ test.describe("PLANTS - UI Test Suite", () => {
             const count = await plantPage.getPlantsCount();
             expect(count).toBeGreaterThan(0);
 
-            const plantA = plantPage.getPlantCardByName(plants.plantA.name);
+            const plantA = plantPage.getPlantCardByName(SEEDED_PLANTS.lavender.name);
             await expect(plantA.cardTitle).toBeVisible();
         });
 
         test("PLANT-11: Plant details accessible for authorized user", async ({ plantPage, plantInfoPage }) => {
-            const plantCard = plantPage.getPlantCardByName(plants.plantB.name);
+            const plantCard = plantPage.getPlantCardByName(SEEDED_PLANTS.daylily.name);
             await plantCard.openDetails();
 
-            await expect(plantInfoPage.page).toHaveURL(new RegExp(`/plant/${plants.plantB.id}`));
-            await expect(plantInfoPage.name).toHaveText(plants.plantB.name);
+            await expect(plantInfoPage.page).toHaveURL(new RegExp(`/plant/${SEEDED_PLANTS.daylily._id}`));
+            await expect(plantInfoPage.name).toHaveText(SEEDED_PLANTS.daylily.name);
         });
 
     });
