@@ -1,0 +1,3 @@
+export const INVALID_PLANT_ID = "invalid-id";
+
+export const NON_EXISTING_PLANT_ID = "000000000000000000000000";

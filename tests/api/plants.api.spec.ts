@@ -1,6 +1,6 @@
 import { test, expect } from "../../fixtures";
-import plants from "../../test-data/plants.json";
-import invalid from "../../test-data/invalid-inputs.json";
+import { INVALID_PLANT_ID, NON_EXISTING_PLANT_ID } from "../../test-data/plants/plant.constants";
+import { SEEDED_PLANTS } from "../../test-data/plants/seeded-plants";
 
 test.describe("PLANTS - API Test Suite", () => {
 
@@ -102,17 +102,17 @@ test.describe("PLANTS - API Test Suite", () => {
     test.describe("Plant details retrieval", () => {
 
         test("PLANT-04: Get plant by valid ID via API", async ({ plantsApi }) => {
-            const response = await plantsApi.getById(plants.plantA.id);
+            const response = await plantsApi.getById(SEEDED_PLANTS.lavender._id);
 
             expect(response.status()).toBe(200);
             const plant = await response.json();
 
             expect(plant).toMatchObject({
-                _id: plants.plantA.id,
-                name: plants.plantA.name,
-                latinName: plants.plantA.latinName,
-                species: plants.plantA.species,
-                lifespan: plants.plantA.lifespan,
+                _id: SEEDED_PLANTS.lavender._id,
+                name: SEEDED_PLANTS.lavender.name,
+                latinName: SEEDED_PLANTS.lavender.latinName,
+                species: SEEDED_PLANTS.lavender.species,
+                lifespan: SEEDED_PLANTS.lavender.lifespan,
                 imageUrl: expect.any(String),
                 soil: expect.arrayContaining([expect.any(String)])
             });
@@ -122,7 +122,7 @@ test.describe("PLANTS - API Test Suite", () => {
         test.fixme("PLANT-05: Get plant by invalid ID format via API (BUG-003)", async ({ plantsApi }) => {
             // FIXME: Crashes backend Server Error. 
             // Reported as BUG-003. Disable until fix is deployed.
-            const response = await plantsApi.getById(invalid.invalidPlantId);
+            const response = await plantsApi.getById(INVALID_PLANT_ID);
 
             expect(response.status()).toBe(400);
             const body = await response.json();
@@ -130,7 +130,7 @@ test.describe("PLANTS - API Test Suite", () => {
         });
 
         test("PLANT-06: Get plant by non-existing ID via API", async ({ plantsApi }) => {
-            const response = await plantsApi.getById(invalid.nonExistingPlantId);
+            const response = await plantsApi.getById(NON_EXISTING_PLANT_ID);
 
             expect(response.status()).toBe(404);
             const body = await response.json();
@@ -139,7 +139,7 @@ test.describe("PLANTS - API Test Suite", () => {
         });
 
         test("PLANT-08: Plant details response JSON schema", async ({ plantsApi }) => {
-            const response = await plantsApi.getById(plants.plantA.id);
+            const response = await plantsApi.getById(SEEDED_PLANTS.lavender._id);
             expect(response.status()).toBe(200);
             const plant = await response.json();
 
@@ -181,17 +181,17 @@ test.describe("PLANTS - API Test Suite", () => {
     test.describe("Plant data integrity", () => {
 
         test("PLANT-16: Plant data integrity (API vs live database)", async ({ plantsApi }) => {
-            const response = await plantsApi.getById(plants.plantA.id);
+            const response = await plantsApi.getById(SEEDED_PLANTS.lavender._id);
             expect(response.status()).toBe(200);
 
             const apiData = await response.json();
 
             expect(apiData).toMatchObject({
-                _id: plants.plantA.id,
-                name: plants.plantA.name,
-                latinName: plants.plantA.latinName,
-                species: plants.plantA.species,
-                lifespan: plants.plantA.lifespan,
+                _id: SEEDED_PLANTS.lavender._id,
+                name: SEEDED_PLANTS.lavender.name,
+                latinName: SEEDED_PLANTS.lavender.latinName,
+                species: SEEDED_PLANTS.lavender.species,
+                lifespan: SEEDED_PLANTS.lavender.lifespan,
                 imageUrl: expect.any(String),
                 soil: expect.arrayContaining([expect.any(String)])
 
