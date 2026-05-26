@@ -2,11 +2,11 @@ import { test, expect } from "../../fixtures";
 import { INVALID_PLANT_ID, NON_EXISTING_PLANT_ID } from "../../test-data/plants/plant.constants";
 import { SEEDED_PLANTS } from "../../test-data/plants/seeded-plants";
 
-test.describe("PLANTS - API Test Suite", () => {
+test.describe("PLANTS - API Test Suite @api @plants", () => {
 
-    test.describe("Plant list retrieval", () => {
+    test.describe("Plant list retrieval @regression", () => {
 
-        test("PLANT-01: Get plant list via API", async ({ plantsApi }) => {
+        test("PLANT-01: Get plant list via API @smoke", async ({ plantsApi }) => {
             const response = await plantsApi.getAll();
 
             expect(response.status()).toBe(200);
@@ -55,7 +55,7 @@ test.describe("PLANTS - API Test Suite", () => {
 
         });
 
-        test("PLANT-09: Multiple sequential API requests", async ({ plantsApi }) => {
+        test("PLANT-09: Multiple sequential API requests @performance", async ({ plantsApi }) => {
             const responses = await Promise.all([
                 plantsApi.getAll(),
                 plantsApi.getAll(),
@@ -79,7 +79,7 @@ test.describe("PLANTS - API Test Suite", () => {
             expect(bodies[1]).toEqual(bodies[2]);
         });
 
-        test("PLANT-12: Large dataset response handling", async ({ plantsApi }) => {
+        test("PLANT-12: Large dataset response handling @performance", async ({ plantsApi }) => {
             const start = Date.now();
             const response = await plantsApi.getAll();
             const duration = Date.now() - start;
@@ -99,9 +99,9 @@ test.describe("PLANTS - API Test Suite", () => {
         });
     });
 
-    test.describe("Plant details retrieval", () => {
+    test.describe("Plant details retrieval @regression", () => {
 
-        test("PLANT-04: Get plant by valid ID via API", async ({ plantsApi }) => {
+        test("PLANT-04: Get plant by valid ID via API @smoke", async ({ plantsApi }) => {
             const response = await plantsApi.getById(SEEDED_PLANTS.lavender._id);
 
             expect(response.status()).toBe(200);
@@ -119,7 +119,7 @@ test.describe("PLANTS - API Test Suite", () => {
 
         });
 
-        test.fixme("PLANT-05: Get plant by invalid ID format via API (BUG-003)", async ({ plantsApi }) => {
+        test.fixme("PLANT-05: Get plant by invalid ID format via API (BUG-003) @security", async ({ plantsApi }) => {
             // FIXME: Crashes backend Server Error. 
             // Reported as BUG-003. Disable until fix is deployed.
             const response = await plantsApi.getById(INVALID_PLANT_ID);
@@ -178,7 +178,7 @@ test.describe("PLANTS - API Test Suite", () => {
         });
     });
 
-    test.describe("Plant data integrity", () => {
+    test.describe("Plant data integrity @sanity @regression", () => {
 
         test("PLANT-16: Plant data integrity (API vs live database)", async ({ plantsApi }) => {
             const response = await plantsApi.getById(SEEDED_PLANTS.lavender._id);

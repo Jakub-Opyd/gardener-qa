@@ -47,6 +47,26 @@ export default defineConfig({
         headless: true,
       },
     },
+    {
+      name: 'smoke',
+      grep: /@smoke/,
+    },
+    {
+      name: 'regression',
+      grep: /@regression/,
+    },
+    {
+      name: 'security',
+      grep: /@security/,
+    },
+    {
+      name: 'api',
+      grep: /@api/,
+    },
+    {
+      name: 'ui',
+      grep: /@ui/,
+    }
 
     // {
     //   name: 'chromium',

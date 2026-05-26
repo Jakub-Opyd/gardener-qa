@@ -19,7 +19,7 @@ const VALID_PASSWORD = "TestPass123!";
 
 export function createValidUser(): RegisterPayload {
     return {
-        email: `user_${randomUUID()}@gardener.test`,
+        email: `user_${randomUUID()}@gardener.playwright.test`,
         password: VALID_PASSWORD
     };
 }
@@ -33,14 +33,14 @@ export function createInvalidEmailUser(): RegisterPayload {
 
 export function createShortPasswordUser(): RegisterPayload {
     return {
-        email: `user_${randomUUID()}@gardener.test`,
+        email: `user_${randomUUID()}@gardener.playwright.test`,
         password: SHORT_PASSWORD
     };
 }
 
 export function createLongPasswordUser(): RegisterPayload {
     return {
-        email: `user_${randomUUID()}@gardener.test`,
+        email: `user_${randomUUID()}@gardener.playwright.test`,
         password: LONG_PASSWORD
     };
 }
@@ -54,7 +54,7 @@ export function createSpacesOnlyEmailUser(): RegisterPayload {
 
 export function createEmptyPasswordUser(): RegisterPayload {
     return {
-        email: `user_${randomUUID()} @gardener.test`,
+        email: `user_${randomUUID()}@gardener.playwright.test`,
         password: EMPTY_PASSWORD
     };
 }

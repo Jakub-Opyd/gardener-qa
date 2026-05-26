@@ -1,7 +1,7 @@
 import { test, expect } from "../../fixtures";
 import { SEEDED_PLANTS } from "../../test-data/plants/seeded-plants";
 
-test.describe("PLANTS - UI Test Suite", () => {
+test.describe("PLANTS - UI Test Suite @regression @ui @plants", () => {
 
     test.describe("Unauthorized user", () => {
         test.beforeEach(async ({ plantPage }) => {
@@ -9,7 +9,7 @@ test.describe("PLANTS - UI Test Suite", () => {
             await plantPage.waitForData();
         });
 
-        test("PLANT-02: Display plant list for Unauthorized user", async ({ plantPage }) => {
+        test("PLANT-02: Display plant list for Unauthorized user @smoke", async ({ plantPage }) => {
             const count = await plantPage.getPlantsCount();
             expect(count).toBeGreaterThan(0);
 
@@ -17,7 +17,7 @@ test.describe("PLANTS - UI Test Suite", () => {
             await expect(plantA.cardTitle).toBeVisible();
         });
 
-        test("PLANT-10: Plant details accessible for unauthorized user", async ({ plantPage, plantInfoPage }) => {
+        test("PLANT-10: Plant details accessible for unauthorized user @sanity", async ({ plantPage, plantInfoPage }) => {
             const plantCard = plantPage.getPlantCardByName(SEEDED_PLANTS.daylily.name);
             await plantCard.openDetails();
 
@@ -99,7 +99,7 @@ test.describe("PLANTS - UI Test Suite", () => {
             expect(plantPage.page.getByRole("heading", { name: "Nie odnaleziono żadnej rośliny" })).toBeVisible();
         });
 
-        test("PLANT-16: Plant card data integrity", async ({ plantPage, plantsApi }) => {
+        test("PLANT-16: Plant card data integrity @sanity", async ({ plantPage, plantsApi }) => {
             const plantCard = plantPage.getPlantCardByName(SEEDED_PLANTS.lavender.name);
             await plantCard.clickCard();
 
@@ -119,7 +119,7 @@ test.describe("PLANTS - UI Test Suite", () => {
             await plantPage.waitForData();
         });
 
-        test("PLANT-03: Display plant list for Authorized user", async ({ plantPage }) => {
+        test("PLANT-03: Display plant list for Authorized user @smoke", async ({ plantPage }) => {
             const count = await plantPage.getPlantsCount();
             expect(count).toBeGreaterThan(0);
 
@@ -127,7 +127,7 @@ test.describe("PLANTS - UI Test Suite", () => {
             await expect(plantA.cardTitle).toBeVisible();
         });
 
-        test("PLANT-11: Plant details accessible for authorized user", async ({ plantPage, plantInfoPage }) => {
+        test("PLANT-11: Plant details accessible for authorized user @sanity", async ({ plantPage, plantInfoPage }) => {
             const plantCard = plantPage.getPlantCardByName(SEEDED_PLANTS.daylily.name);
             await plantCard.openDetails();
 
