@@ -1,9 +1,9 @@
 import { AuthService } from "../api/auth.service";
 import { Page } from "@playwright/test";
-import { AuthUser } from "../models/auth.types";
 import { generateUserData } from "../factories/user.factory";
+import { AuthResponse } from "../models/auth/auth.responses";
 
-export async function createDynamicUser(authApi: AuthService): Promise<AuthUser> {
+export async function createDynamicUser(authApi: AuthService): Promise<AuthResponse> {
     const user = generateUserData();
     const response = await authApi.register(user);
 
@@ -20,7 +20,7 @@ export async function createDynamicUser(authApi: AuthService): Promise<AuthUser>
     return await response.json();
 }
 
-export async function injectSession(page: Page, user: AuthUser) {
+export async function injectSession(page: Page, user: AuthResponse) {
     await page.goto("/");
 
     await page.evaluate((user) => {
