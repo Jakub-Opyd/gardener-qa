@@ -48,6 +48,10 @@ export default defineConfig({
       },
     },
     {
+      name: "mocked",
+      grep: /@mocked/
+    },
+    {
       name: 'smoke',
       grep: /@smoke/,
     },
