@@ -38,7 +38,7 @@ export default defineConfig({
     {
       name: 'GUI-Chromium',
       testMatch: /.*\.gui\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] }, // default
+      use: { ...devices['Desktop Chrome'] },
     },
     {
       name: 'API-Tests',
@@ -48,28 +48,8 @@ export default defineConfig({
       },
     },
     {
-      name: "mocked",
-      grep: /@mocked/
-    },
-    {
-      name: 'smoke',
-      grep: /@smoke/,
-    },
-    {
-      name: 'regression',
-      grep: /@regression/,
-    },
-    {
-      name: 'security',
-      grep: /@security/,
-    },
-    {
-      name: 'api',
-      grep: /@api/,
-    },
-    {
-      name: 'ui',
-      grep: /@ui/,
+      name: 'Mocked',
+      testMatch: /.*\.mocked\.spec\.ts/,
     }
 
     // {
