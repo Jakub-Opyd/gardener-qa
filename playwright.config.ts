@@ -28,9 +28,9 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL: process.env.BASE_URL,
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    video: 'on-first-retry',
+    video: 'retain-on-failure',
   },
 
   /* Configure projects for major browsers */
