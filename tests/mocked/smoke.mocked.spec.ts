@@ -4,6 +4,8 @@ import { SEEDED_USERS } from "../../test-data/auth/seeded-users";
 import { VALID_PASSWORD } from "../../test-data/shared/validation.constants";
 import { SEEDED_PLANTS } from "../../test-data/plants/seeded-plants";
 import { setupApiMocks } from "../../helpers/mock-api.helper";
+import { injectSession } from "../../helpers/auth.helpers";
+import { authResponse } from "../../mock-data/auth.mock";
 
 test.describe("GUI Smoke Tests @smoke @mocked", () => {
     test.beforeEach(async ({ page }) => {
@@ -30,16 +32,18 @@ test.describe("GUI Smoke Tests @smoke @mocked", () => {
     });
 
     test.describe("FAVORITES", () => {
-        test("FAV-01 - Add plant to favorites via UI", async ({ guiUser, plantPage, favoritePage }) => {
+        test("FAV-01 - Add plant to favorites via UI", async ({ page, plantPage, favoritePage }) => {
+            const user = authResponse;
+            await injectSession(page, user);
             await plantPage.open();
             const plantCard = plantPage.getPlantCardByName(SEEDED_PLANTS.hosta.name);
             await plantCard.toggleFavorite();
             await favoritePage.open();
-            await expect(favoritePage.getPlantCardByName(SEEDED_PLANTS.lavender.name).cardTitle).toBeVisible();
+            await expect(favoritePage.getPlantCardByName(SEEDED_PLANTS.hosta.name).cardTitle).toBeVisible();
         });
-        test("FAV-12 - Remove plant from favorites via UI", async ({ guiUser, request, favoritePage }) => {
-            const { user } = guiUser;
-
+        test("FAV-12 - Remove plant from favorites via UI", async ({ page, favoritePage }) => {
+            const user = authResponse;
+            await injectSession(page, user);
             await favoritePage.open();
             const plantCard = favoritePage.getPlantCardByName(SEEDED_PLANTS.lavender.name);
             await plantCard.toggleFavorite();
@@ -57,7 +61,9 @@ test.describe("GUI Smoke Tests @smoke @mocked", () => {
             const plantA = plantPage.getPlantCardByName(SEEDED_PLANTS.lavender.name);
             await expect(plantA.cardTitle).toBeVisible();
         });
-        test("PLANT-03: Display plant list for Authorized user", async ({ plantPage, guiUser }) => {
+        test("PLANT-03: Display plant list for Authorized user", async ({ page, plantPage }) => {
+            const user = authResponse;
+            await injectSession(page, user);
             await plantPage.open();
             await plantPage.waitForData();
             const count = await plantPage.getPlantsCount();
