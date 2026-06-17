@@ -13,8 +13,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
     "@playwright/test": "^1.58.2",
-    "@types/node": "^25.5.0",
+    "@types/node": "^25.9.3",
     "wait-on": "^9.0.10"
   },
   "dependencies": {
