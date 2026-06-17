@@ -50,7 +50,23 @@ export default defineConfig({
     {
       name: 'Mocked',
       testMatch: /.*\.mocked\.spec\.ts/,
-    }
+    },
+    {
+      name: 'Accessibility-Light',
+      testMatch: /.*\.a11y\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        colorScheme: 'light',
+      },
+    },
+    {
+      name: 'Accessibility-Dark',
+      testMatch: /.*\.a11y\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        colorScheme: 'dark',
+      },
+    },
 
     // {
     //   name: 'chromium',

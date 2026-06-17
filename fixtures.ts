@@ -10,6 +10,9 @@ import { FavoritesService } from "./api/favorites.service";
 import { PlantsService } from "./api/plants.service";
 import { AuthResponse } from "./models/auth/auth.responses";
 import { createDynamicUser, injectSession } from "./helpers/auth.helpers";
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 type Fixtures = {
     apiContext: APIRequestContext;
