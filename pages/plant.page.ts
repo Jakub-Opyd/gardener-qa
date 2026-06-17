@@ -41,4 +41,10 @@ export class PlantPage extends BasePage {
 
         return new PlantCardComponent(plantCard);
     }
+
+    getFirstPlantCard(): PlantCardComponent {
+        return new PlantCardComponent(
+            this.plantCards.first()
+        );
+    }
 }
