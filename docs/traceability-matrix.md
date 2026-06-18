@@ -33,6 +33,8 @@
 
 ## Known Defects
 
+### Functional
+
 | Bug ID | Title | Severity | Status | Related Test Case |
 |---|---|---|---|---|
 | BUG-001 | Missing maximum length validation on email and password fields | Minor | New | AUTH-07 |
@@ -41,6 +43,14 @@
 | BUG-004 | Backend crashes (500) on invalid email formats | Major | New | AUTH-03, AUTH-08 |
 | BUG-005 | Security: Backend crashes on injection payloads | Major | New | AUTH-09, AUTH-10 |
 | BUG-006 | Password length requirement not enforced (201 instead of 400) | Major | New | AUTH-06 |
+
+### Accessibility
+
+| Bug ID | Title | Severity | Status | Related Test Case |
+|---|---|---|---|---|
+| A11Y-001 | Login button does not meet WCAG AA contrast requirements | Minor | New |
+| A11Y-002 | Register page contains invalid main landmark structure | Minor | New |
+| A11Y-003 | Filter text does not meet WCAG AA contrast requirements | Minor | New |
 
 ---
 
@@ -147,3 +157,16 @@
 | REQ-GC-10 | Canvas boundary control | SC-GC-10 | GC-15 | Canvas boundary control | Not executed |
 | REQ-GC-06 | Create garden layout | SC-GC-06 | GC-16 | Refresh page with created garden | Not executed |
 | REQ-GC-06 | Create garden layout | SC-GC-06 | GC-17 | Large number of plants on canvas | Not executed |
+
+---
+
+## Accessibility
+
+| Requirement ID | Feature | Scenario ID | Test Case ID | Test Title | Status |
+|---|---|---|---|---|---|
+| REQ-A11Y-001 | WCAG Compliance | SC-A11Y-01 | A11Y-001 | Home page accessibility validation | Fail |
+| REQ-A11Y-001 | WCAG Compliance | SC-A11Y-02 | A11Y-002 | Login page accessibility validation | Fail |
+| REQ-A11Y-001 | WCAG Compliance | SC-A11Y-03 | A11Y-003 | Register page accessibility validation | Fail |
+| REQ-A11Y-001 | WCAG Compliance | SC-A11Y-04 | A11Y-004 | Plant encyclopedia accessibility validation | Pass |
+| REQ-A11Y-001 | WCAG Compliance | SC-A11Y-05 | A11Y-005 | Favorites accessibility validation | Pass |
+| REQ-A11Y-001 | WCAG Compliance | SC-A11Y-06 | A11Y-006 | Plant details accessibility validation | Fail |

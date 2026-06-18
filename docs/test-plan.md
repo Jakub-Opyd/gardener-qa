@@ -46,6 +46,10 @@ The following test types are not included in this test plan:
 - mobile application testing
 - cross-browser compatibility testing (tests executed in Chromium only)
 
+### Accessibility Scope
+
+Accessibility verification will be performed on critical user flows and key application pages using automated WCAG validation.
+
 ---
 
 ## 4. Test Levels

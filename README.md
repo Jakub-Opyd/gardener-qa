@@ -1,5 +1,15 @@
 # Gardener-QA
 
+## Project Highlights
+
+- 60+ automated tests
+- UI, API and Accessibility testing
+- Playwright + TypeScript
+- POM + Component Objects
+- CI/CD with GitHub Actions
+- 6 functional defects identified
+- 3 accessibility defects identified
+  
 ## Overview
 
 **Gardener-QA** is a comprehensive QA portfolio project created for a full-stack gardening application built with React, Express.js, and MongoDB.
@@ -8,6 +18,7 @@ The project demonstrates both manual and automated testing practices commonly us
 
 * UI test automation
 * API testing
+* accessibility testing
 * manual functional testing
 * defect reporting
 * traceability management
@@ -75,6 +86,33 @@ The project covers both frontend and backend verification.
 * traceability mapping
 
 ## Automated Testing
+
+### Accessibility Testing
+
+Implemented with:
+
+* Playwright
+* axe-core
+* automated WCAG 2.1 AA validation
+
+Covered areas:
+
+* color contrast validation
+* landmark structure validation
+* semantic HTML validation
+* ARIA-related accessibility checks
+
+Executed in:
+
+* Light Theme
+* Dark Theme
+
+Detected accessibility defects include:
+
+* WCAG contrast violations
+* duplicate landmarks
+* nested landmarks
+* non-unique landmarks
 
 ### UI Automation
 
@@ -226,6 +264,7 @@ docs/
 ├── test-strategy.md
 ├── test-scenarios.md
 ├── traceability-matrix.md
+├── bug-reports/
 └── test-cases/
 ```
 
@@ -254,6 +293,9 @@ tests/
 │   ├── auth.gui.spec.ts
 │   ├── favorites.gui.spec.ts
 │   └── plants.gui.spec.ts
+│
+├── accessibility/
+│  └── accessibility.a11y.spec.ts
 │
 └── mocked/
     └── smoke.mocked.spec.ts
@@ -297,6 +339,24 @@ Coverage includes:
 * persistence validation
 * authorization checks
 
+## Accessibility
+
+Coverage includes:
+
+* Home Page
+* Login Page
+* Register Page
+* Plant Encyclopedia
+* Favorites
+* Plant Details
+
+Validated areas:
+
+* WCAG 2.1 AA compliance
+* color contrast
+* landmark structure
+* semantic page hierarchy
+
 ---
 
 # Defect Reporting
@@ -317,6 +377,14 @@ Example defects discovered during testing:
 | BUG-002 | Backend crash on invalid plantId   | Critical |
 | BUG-003 | Unhandled MongoDB CastError        | Critical |
 | BUG-005 | Injection payload handling failure | Major    |
+
+Accessibility defects discovered:
+
+| ID | Description | Severity |
+|----|-------------|----------|
+| A11Y-001 | Login button contrast violation | Minor |
+| A11Y-002 | Invalid landmark structure | Minor |
+| A11Y-003 | Filter section contrast violation | Minor |
 
 ---
 
@@ -426,7 +494,6 @@ TEST_USER1_PASSWORD=Password123!
 Potential future enhancements:
 
 * Dockerized test execution
-* accessibility testing
 * visual regression testing
 * performance testing
 * advanced reporting dashboards
@@ -436,13 +503,6 @@ Potential future enhancements:
 
 # Project Purpose
 
-This repository was created to demonstrate practical QA Engineering skills in areas such as:
+This project was created to simulate the work of a QA Engineer in a real software development environment.
 
-* test automation
-* API testing
-* framework architecture
-* CI/CD integration
-* defect analysis
-* debugging
-* maintainable test design
-* quality-oriented engineering practices
+It combines manual testing, API testing, UI automation, accessibility validation, defect management, test documentation, traceability, and CI/CD integration within a single maintainable Playwright framework.

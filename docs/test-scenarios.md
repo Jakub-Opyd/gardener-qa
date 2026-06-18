@@ -35,6 +35,7 @@ The scenarios cover the following modules:
 - FAVORITES
 - GARDEN CREATOR
 - END-TO-END (cross-module user flows)
+- ACCESSIBILITY
 
 ---
 
@@ -110,7 +111,20 @@ These scenarios validate complete user journeys spanning multiple application mo
 
 ---
 
-## 9. Traceability
+## 10. Accessibility Scenarios
+
+| ID | Scenario | Description |
+|----|----------|-------------|
+| SC-A11Y-01 | Home page accessibility validation | Home page meets WCAG 2.1 AA requirements |
+| SC-A11Y-02 | Login page accessibility validation | Login page meets WCAG 2.1 AA requirements |
+| SC-A11Y-03 | Register page accessibility validation | Register page meets WCAG 2.1 AA requirements |
+| SC-A11Y-04 | Plant encyclopedia accessibility validation | Plant encyclopedia meets WCAG 2.1 AA requirements |
+| SC-A11Y-05 | Favorites accessibility validation | Favorites page meets WCAG 2.1 AA requirements |
+| SC-A11Y-06 | Plant details accessibility validation | Plant details page meets WCAG 2.1 AA requirements |
+
+---
+
+## 11. Traceability
 
 Each scenario is validated by detailed **test cases** located in:
 

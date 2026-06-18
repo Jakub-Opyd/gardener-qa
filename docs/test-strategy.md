@@ -120,6 +120,30 @@ Automation **not** applied to:
 - purely visual/layout verification
 - tests requiring manual file system interaction (e.g. large file upload performance)
 
+### Accessibility Testing
+
+Accessibility testing is performed using:
+- Playwright
+- axe-core
+
+Covered pages:
+- Home Page
+- Login Page
+- Register Page
+- Plant Encyclopedia
+- Favorites
+- Plant Details
+
+Accessibility validation includes:
+- Color contrast
+- Landmark structure
+- Semantic HTML violations
+- WCAG 2.1 AA compliance checks
+
+Tests are executed in:
+- Light theme
+- Dark theme
+  
 ---
 
 ## 6. Test Environment
